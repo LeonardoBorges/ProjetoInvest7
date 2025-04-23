@@ -2,7 +2,7 @@ package br.com.invest7.ProjetoInvest7.controller;
 
 import br.com.invest7.ProjetoInvest7.controller.request.AtualizarUsuarioRequest;
 import br.com.invest7.ProjetoInvest7.controller.request.CadastrarUsuarioRequest;
-import br.com.invest7.ProjetoInvest7.controller.request.LoginUsuarioRequest;
+import br.com.invest7.ProjetoInvest7.controller.request.LoginRequest;
 import br.com.invest7.ProjetoInvest7.controller.response.CadastrarUsuarioResponse;
 import br.com.invest7.ProjetoInvest7.entity.Usuario;
 import br.com.invest7.ProjetoInvest7.exception.EntradaErrorExeception;
@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RequestMapping("/user")
@@ -23,7 +25,7 @@ public class UsuarioController {
        this.usuarioService =usuarioService;
    }
 
-    @PostMapping("/cadastrar")
+    @PostMapping()
     public CadastrarUsuarioResponse cadastrar(@RequestBody @Valid CadastrarUsuarioRequest usuarioRequest){
         Usuario usuario = UsuarioMapper.map(usuarioRequest);
         usuario = usuarioService.cadastrarUsuario(usuario);
@@ -31,7 +33,7 @@ public class UsuarioController {
         return UsuarioMapper.map(usuario);
     }
 
-    @GetMapping("/buscar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> buscarIndividual(@PathVariable String id){
         try {
             return new ResponseEntity<Usuario>(usuarioService.buscarIndividual(id), HttpStatus.OK);
@@ -40,20 +42,17 @@ public class UsuarioController {
         }
     }
 
-    @PatchMapping("/atualizar/{id}")
-    public ResponseEntity<?> atualizarUsuario(@PathVariable String id, @RequestBody AtualizarUsuarioRequest atualizarUsuarioRequest){
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> atualizarUsuario(@PathVariable String id, @RequestBody AtualizarUsuarioRequest atualizarUsuarioRequest) {
         try {
             Usuario usuario = UsuarioMapper.map(atualizarUsuarioRequest);
             usuarioService.updateUsuario(id, usuario);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-        } catch (EntradaErrorExeception e){
+        } catch (EntradaErrorExeception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginUsuarioRequest loginRequest){
-
-        }
     }
+
+
 }
