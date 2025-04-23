@@ -1,5 +1,6 @@
 package br.com.invest7.ProjetoInvest7.controller.request;
 
+import br.com.invest7.ProjetoInvest7.entity.enums.Genero;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.lang.NonNull;
@@ -7,14 +8,23 @@ import org.springframework.lang.NonNull;
 import java.time.LocalDate;
 
 public class CadastrarUsuarioRequest {
-    private String nome = null, cpf = null, endereco = null, genero = null,
-            email = null, senha = null;
-
+    private String nome = null, cpf = null, endereco = null,
+            email = null, senha = null, cep =null;
+    private Genero genero = null;
     @NonNull
     private LocalDate dt_nasc = null;
 
     @Field("id_perfil")
     private Integer idPerfil;
+
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
 
     public String getNome() {
         return nome;
@@ -40,11 +50,11 @@ public class CadastrarUsuarioRequest {
         this.endereco = endereco;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
