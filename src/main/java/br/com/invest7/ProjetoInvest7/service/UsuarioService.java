@@ -3,6 +3,8 @@ package br.com.invest7.ProjetoInvest7.service;
 import br.com.invest7.ProjetoInvest7.client.ViaCepClient;
 import br.com.invest7.ProjetoInvest7.client.response.ViaCepEnderecoResponse;
 import br.com.invest7.ProjetoInvest7.controller.request.LoginRequest;
+import br.com.invest7.ProjetoInvest7.controller.response.CadastrarUsuarioResponse;
+import br.com.invest7.ProjetoInvest7.controller.response.LoginResponse;
 import br.com.invest7.ProjetoInvest7.entity.Usuario;
 import br.com.invest7.ProjetoInvest7.exception.EntradaErrorExeception;
 import br.com.invest7.ProjetoInvest7.exception.UsuarioNaoEncontratoException;
@@ -32,7 +34,7 @@ public class UsuarioService {
 
 
 
-    public Usuario cadastrarUsuario(Usuario usuario){
+    public CadastrarUsuarioResponse cadastrarUsuario(Usuario usuario){
         String senhaHash = this.bCryptPasswordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaHash);
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
@@ -54,8 +56,10 @@ public class UsuarioService {
                 buscaCep.getBairro() + ", " +
                 buscaCep.getLocalidade() + " - " +
                 buscaCep.getUf());
+        this.usuarioRepository.save(usuario);
+        String token = jwtUtil.generateToken(usuario);
+        return new CadastrarUsuarioResponse(token, usuario.getId(), usuario.getNome());
 
-        return this.usuarioRepository.save(usuario);
     }
 
     public Usuario buscarIndividual(String id){
@@ -68,7 +72,7 @@ public class UsuarioService {
         if(null == updateUsuario) throw new UsuarioNaoEncontratoException();
     }
 
-    public String autenticar(LoginRequest loginRequest) {
+    public LoginResponse autenticar(LoginRequest loginRequest) {
         Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new EntradaErrorExeception("Email não encontrado"));
 
@@ -76,7 +80,8 @@ public class UsuarioService {
             throw new EntradaErrorExeception("Senha inválida");
         }
 
-        return jwtUtil.generateToken(usuario.getEmail());
+        String token = jwtUtil.generateToken(usuario);
+        return new LoginResponse(token, usuario.getId(), usuario.getNome());
     }
 
 }

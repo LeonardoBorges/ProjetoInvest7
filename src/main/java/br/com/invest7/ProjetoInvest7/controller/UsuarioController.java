@@ -25,12 +25,11 @@ public class UsuarioController {
        this.usuarioService =usuarioService;
    }
 
-    @PostMapping()
+    @PostMapping("/cadastrar")
     public CadastrarUsuarioResponse cadastrar(@RequestBody @Valid CadastrarUsuarioRequest usuarioRequest){
         Usuario usuario = UsuarioMapper.map(usuarioRequest);
-        usuario = usuarioService.cadastrarUsuario(usuario);
+        return usuarioService.cadastrarUsuario(usuario); // já retorna o DTO pronto
 
-        return UsuarioMapper.map(usuario);
     }
 
     @GetMapping("/{id}")

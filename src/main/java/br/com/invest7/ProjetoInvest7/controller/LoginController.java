@@ -1,6 +1,7 @@
 package br.com.invest7.ProjetoInvest7.controller;
 
 import br.com.invest7.ProjetoInvest7.controller.request.LoginRequest;
+import br.com.invest7.ProjetoInvest7.controller.response.LoginResponse;
 import br.com.invest7.ProjetoInvest7.exception.EntradaErrorExeception;
 import br.com.invest7.ProjetoInvest7.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,6 @@ import java.util.Map;
 public class LoginController {
 
     private final UsuarioService usuarioService;
-
     public LoginController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
@@ -25,8 +25,8 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            String token = usuarioService.autenticar(loginRequest);
-            return ResponseEntity.ok().body(Map.of("token", token));
+            LoginResponse response = usuarioService.autenticar(loginRequest);
+            return ResponseEntity.ok().body(response);
         } catch (EntradaErrorExeception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }

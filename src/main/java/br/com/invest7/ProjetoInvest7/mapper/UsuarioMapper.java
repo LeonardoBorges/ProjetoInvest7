@@ -22,12 +22,14 @@ public class UsuarioMapper {
         usuario.setIdPerfil(usuarioRequest.getIdPerfil());
         return usuario;
     }
-
+/*
     public static CadastrarUsuarioResponse map(Usuario usuario){
         CadastrarUsuarioResponse usuarioResponse = new CadastrarUsuarioResponse();
         usuarioResponse.setId(usuario.getId_user());
         return usuarioResponse;
     }
+
+ */
 
     public static Usuario map(AtualizarUsuarioRequest atualizarUsuarioRequest){
         Usuario usuario = new Usuario();

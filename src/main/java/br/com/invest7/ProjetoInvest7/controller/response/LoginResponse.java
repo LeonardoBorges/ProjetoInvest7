@@ -1,5 +1,7 @@
 package br.com.invest7.ProjetoInvest7.controller.response;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-public record CadastrarUsuarioResponse(String token, String id, String nome) {}
+
+public record LoginResponse(String token, String Id, String nome) {}
